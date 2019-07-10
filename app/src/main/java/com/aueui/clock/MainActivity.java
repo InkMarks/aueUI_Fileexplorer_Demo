@@ -1,6 +1,7 @@
 package com.aueui.clock;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.aueui.clock.Activity.AddAlarm;
 import com.aueui.clock.Adpters.AuePagerAdpter;
 import com.aueui.clock.Utils.AnimationUtils;
 
@@ -184,6 +186,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tv_stopwatch.setTextColor(Color.WHITE);
                 tv_timer.setTextColor(getResources().getColor(R.color.blue));
                 mViewPager.setCurrentItem(3);
+                break;
+            case R.id.button:
+                switch (mViewPager.getCurrentItem()){
+                    case 0:
+                        startActivity(new Intent(MainActivity.this, AddAlarm.class));
+                        break;
+                }
                 break;
         }
     }

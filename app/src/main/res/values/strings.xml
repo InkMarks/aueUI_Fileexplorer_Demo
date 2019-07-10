@@ -6,4 +6,12 @@
     <string name="time">时钟</string>
     <string name="Stopwatch">秒表</string>
     <string name="timer">计时器</string>
+    <string name="add_alarm">添加时钟</string>
+    <string name="alarm_repeat">闹钟重复</string>
+    <string name="alarm_repeat_once">响一次</string>
+    <string name="alarm_bell">铃声</string>
+    <string name="alarm_bell_choices_default">默认</string>
+    <string name="alarm_vibrate">响铃时震动</string>
+    <string name="alarm_detele_afterbelled">响铃后删除此闹钟</string>
+    <string name="alarm_remarks">备注</string>
 </resources>
