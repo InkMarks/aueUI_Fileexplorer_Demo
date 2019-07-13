@@ -3,6 +3,7 @@ package com.aueui.clock;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,10 +37,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
-    private TextView tv_alarm_clock, tv_time, tv_stopwatch, tv_timer, tv_date;
+    private TextView tv_alarm_clock, tv_time, tv_stopwatch, tv_timer, tv_date, tv_min, tv_sec;
     private List<View> views;
     private View alarm, time, stopwatch, timer;
     private Button button;
+    private boolean isPaused = false;
+    private String timePass;
+    private int PassedTime;
+    private boolean isStart = false;
+
 
     @Override
 
@@ -48,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initView();
         initTime();
+        initStopWatch();
+    }
+
+    private void initStopWatch() {
+        tv_min = stopwatch.findViewById(R.id.tv_min);
+        tv_sec = stopwatch.findViewById(R.id.tv_sec);
     }
 
     @SuppressLint("SetTextI18n")
@@ -55,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_date = time.findViewById(R.id.date);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月dd日");
         Date date = new Date(System.currentTimeMillis());
-        String[] str=new String[]{"","日","一","二","三","四","五","六"};
-        tv_date.setText(simpleDateFormat.format(date)+"\t周"+str [Calendar.DAY_OF_WEEK]);
+        String[] str = new String[]{"", "日", "一", "二", "三", "四", "五", "六"};
+        tv_date.setText(simpleDateFormat.format(date) + "\t周" + str[Calendar.DAY_OF_WEEK]);
     }
 
     private void initView() {
@@ -98,9 +110,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (i) {
                     case 0:
                         tv_alarm_clock.setTextColor(getResources().getColor(R.color.blue));
-                        tv_time.setTextColor(Color.WHITE);
-                        tv_stopwatch.setTextColor(Color.WHITE);
-                        tv_timer.setTextColor(Color.WHITE);
+                        tv_time.setTextColor(Color.BLACK);
+                        tv_stopwatch.setTextColor(Color.BLACK);
+                        tv_timer.setTextColor(Color.BLACK);
                         if (isFromTime) {
                             button.setVisibility(View.VISIBLE);
                             button.setAnimation(AnimationUtils.moveToViewLocation());
@@ -110,19 +122,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         isFromTime = false;
                         break;
                     case 1:
-                        tv_alarm_clock.setTextColor(Color.WHITE);
+                        tv_alarm_clock.setTextColor(Color.BLACK);
                         tv_time.setTextColor(getResources().getColor(R.color.blue));
-                        tv_stopwatch.setTextColor(Color.WHITE);
-                        tv_timer.setTextColor(Color.WHITE);
+                        tv_stopwatch.setTextColor(Color.BLACK);
+                        tv_timer.setTextColor(Color.BLACK);
                         button.setVisibility(View.GONE);
                         button.setAnimation(AnimationUtils.moveToViewBottom());
                         isFromTime = true;
                         break;
                     case 2:
-                        tv_alarm_clock.setTextColor(Color.WHITE);
-                        tv_time.setTextColor(Color.WHITE);
+                        tv_alarm_clock.setTextColor(Color.BLACK);
+                        tv_time.setTextColor(Color.BLACK);
                         tv_stopwatch.setTextColor(getResources().getColor(R.color.blue));
-                        tv_timer.setTextColor(Color.WHITE);
+                        tv_timer.setTextColor(Color.BLACK);
                         if (isFromTime) {
                             button.setVisibility(View.VISIBLE);
                             button.setAnimation(AnimationUtils.moveToViewLocation());
@@ -133,9 +145,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         isFromTime = false;
                         break;
                     case 3:
-                        tv_alarm_clock.setTextColor(Color.WHITE);
-                        tv_time.setTextColor(Color.WHITE);
-                        tv_stopwatch.setTextColor(Color.WHITE);
+                        tv_alarm_clock.setTextColor(Color.BLACK);
+                        tv_time.setTextColor(Color.BLACK);
+                        tv_stopwatch.setTextColor(Color.BLACK);
                         tv_timer.setTextColor(getResources().getColor(R.color.blue));
                         if (isFromTime) {
                             button.setVisibility(View.VISIBLE);
@@ -156,41 +168,95 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 1:
+                    if (!isPaused) {
+                        setPassedTime();
+                        UpData();
+                    }
+                    handler.sendEmptyMessageDelayed(1, 1000);
+                    break;
+                case 2:
+                    handler.sendEmptyMessage(2);
+                    break;
+            }
+        }
+    };
+
+    private void startTime() {
+        handler.sendEmptyMessageDelayed(1, 1000);
+    }
+
+    private void UpData() {
+        tv_min.setText(getMin());
+        tv_sec.setText(getSec());
+    }
+
+    public void setPassedTime() {
+        PassedTime = PassedTime + 1;
+        timePass = this.getMin() + "" + this.getSec();
+    }
+
+    public CharSequence getMin() {
+        return String.valueOf(PassedTime / 60);
+    }
+
+    public CharSequence getSec() {
+        int sec = PassedTime % 60;
+        return sec < 10 ? "0" + sec : String.valueOf(sec);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_alarm_clock:
                 tv_alarm_clock.setTextColor(getResources().getColor(R.color.blue));
-                tv_time.setTextColor(Color.WHITE);
-                tv_stopwatch.setTextColor(Color.WHITE);
-                tv_timer.setTextColor(Color.WHITE);
+                tv_time.setTextColor(Color.BLACK);
+                tv_stopwatch.setTextColor(Color.BLACK);
+                tv_timer.setTextColor(Color.BLACK);
                 mViewPager.setCurrentItem(0);
                 break;
             case R.id.tv_time:
-                tv_alarm_clock.setTextColor(Color.WHITE);
+                tv_alarm_clock.setTextColor(Color.BLACK);
                 tv_time.setTextColor(getResources().getColor(R.color.blue));
-                tv_stopwatch.setTextColor(Color.WHITE);
-                tv_timer.setTextColor(Color.WHITE);
+                tv_stopwatch.setTextColor(Color.BLACK);
+                tv_timer.setTextColor(Color.BLACK);
                 mViewPager.setCurrentItem(1);
                 break;
             case R.id.tv_stopwatch:
-                tv_alarm_clock.setTextColor(Color.WHITE);
-                tv_time.setTextColor(Color.WHITE);
+                tv_alarm_clock.setTextColor(Color.BLACK);
+                tv_time.setTextColor(Color.BLACK);
                 tv_stopwatch.setTextColor(getResources().getColor(R.color.blue));
-                tv_timer.setTextColor(Color.WHITE);
+                tv_timer.setTextColor(Color.BLACK);
                 mViewPager.setCurrentItem(2);
                 break;
             case R.id.tv_timer:
-                tv_alarm_clock.setTextColor(Color.WHITE);
-                tv_time.setTextColor(Color.WHITE);
-                tv_stopwatch.setTextColor(Color.WHITE);
+                tv_alarm_clock.setTextColor(Color.BLACK);
+                tv_time.setTextColor(Color.BLACK);
+                tv_stopwatch.setTextColor(Color.BLACK);
                 tv_timer.setTextColor(getResources().getColor(R.color.blue));
                 mViewPager.setCurrentItem(3);
                 break;
             case R.id.button:
-                switch (mViewPager.getCurrentItem()){
+                switch (mViewPager.getCurrentItem()) {
                     case 0:
                         startActivity(new Intent(MainActivity.this, AddAlarm.class));
+                        break;
+                    case 2:
+                        if (!isStart) {
+                            handler.removeMessages(1);
+                            startTime();
+                            isPaused = false;
+                            button.setText("开始");
+                            isStart = true;
+                        } else
+                            isPaused = true;
+                        PassedTime = 0;
+                        button.setText("重置");
+                        isStart = false;
                         break;
                 }
                 break;

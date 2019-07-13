@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="38dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -20,8 +20,8 @@
 
         <TextView
             android:id="@+id/btn_exit"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/btn_exit" />
@@ -37,12 +37,12 @@
             android:gravity="center"
             android:text="@string/add_alarm"
             android:textColor="#5b80f0"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/btn_confirm"
-            android:layout_width="30dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/btn_confirm" />
