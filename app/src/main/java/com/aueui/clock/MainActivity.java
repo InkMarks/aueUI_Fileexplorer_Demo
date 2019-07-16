@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aueui.clock.Activity.AddAlarm;
 import com.aueui.clock.Adpters.AuePagerAdpter;
@@ -34,7 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
 
     private ViewPager mViewPager;
     private TextView tv_alarm_clock, tv_time, tv_stopwatch, tv_timer, tv_date, tv_min, tv_sec;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_stopwatch.setOnClickListener(this);
         tv_timer.setOnClickListener(this);
         button.setOnClickListener(this);
+        button.setOnLongClickListener(this);
         views = new ArrayList<>();
         LayoutInflater layoutInflater = getLayoutInflater();
         alarm = layoutInflater.inflate(R.layout.alarm, null);
@@ -247,19 +249,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case 2:
                         if (!isStart) {
+                            Toast.makeText(MainActivity.this,getResources().getText(R.string.stopwatch_tips_reset),Toast.LENGTH_SHORT).show();
                             handler.removeMessages(1);
                             startTime();
                             isPaused = false;
-                            button.setText("开始");
+                            button.setText("暂停");
                             isStart = true;
-                        } else
+                        } else {
                             isPaused = true;
-                        PassedTime = 0;
-                        button.setText("重置");
-                        isStart = false;
+                            // PassedTime = 0;
+                            button.setText("继续");
+                            isStart = false;
+                        }
                         break;
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.button:
+                switch (mViewPager.getCurrentItem()) {
+                    case 2:
+//                        handler.removeMessages(1);
+//                        isPaused = true;
+//                        PassedTime = 0;
+//                        button.setText("重置");
+//                        isStart = false;
+                        recreate();
+                        break;
+                }
+                break;
+        }
+        return false;
     }
 }

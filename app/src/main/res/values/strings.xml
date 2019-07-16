@@ -14,4 +14,5 @@
     <string name="alarm_vibrate">响铃时震动</string>
     <string name="alarm_detele_afterbelled">响铃后删除此闹钟</string>
     <string name="alarm_remarks">备注</string>
+    <string name="stopwatch_tips_reset">长按暂停键重置</string>
 </resources>
